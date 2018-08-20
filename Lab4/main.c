@@ -28,16 +28,16 @@ void main(void)
 {
 	WDT_A->CTL = WDT_A_CTL_PW | WDT_A_CTL_HOLD;		// stop watchdog timer
 
-	buffer = initializeBuffer(60); // initialize buffer with size of 60 samples (aka 60 sets of 8 bits since parameter of function is uint8_t) -- do we need to change buffer to hold 16 bit data so that it can store temp values with 14 bit resolution?
+	buffer = initializeBuffer(60); // initialize buffer with size of 60 samples 
 
 	pin_config();
 	clock_config();
 	UART_config();
 	ADC_temp_config();
-	ADC14->CTL0 |= ADC14_CTL0_ENC | ADC14_CTL0_SC; //enable conversion, start conversion (Figure 20-8) (reset start conversion back to low in interrupt)
+	ADC14->CTL0 |= ADC14_CTL0_ENC | ADC14_CTL0_SC; //enable conversion, start conversion 
 
 	__enable_irq(); //enable global interrupts
-	SCB->SCR &= ~SCB_SCR_ENABLE_SLEEPONEXIT; //wake up ADC on exit from ISR (allows processor to go into sleep mode when the __sleep() function is called) -- allows for a low-power mode
+	SCB->SCR &= ~SCB_SCR_ENABLE_SLEEPONEXIT; //wake up ADC on exit from ISR 
 
 	buffer_check();
 	uart_check();
@@ -65,8 +65,8 @@ void main(void)
 	        }
 	        clearBuffer(buffer);
 	    }
-	    //ADC14->CTL0 |= ADC14_CTL0_ENC | ADC14_CTL0_SC; //enable conversion, start conversion (Figure 20-8) (reset start conversion back to low in interrupt)
-	    __sleep(); // blocks until conversion is finished -- (puts processor into a low power mode until interrupt happens -- when interrupt completes whte processor will wake upt its main thread aka the code at the point where __sleep() is called and execute the lines after that)
+	    
+	    __sleep(); // blocks until conversion is finished -- (puts processor into a low power mode until interrupt happens)
 	    __no_operation(); //used for breakpoint
 
 	    //)add temp data to buffer every 1 second for up to 1 minute in handler)
