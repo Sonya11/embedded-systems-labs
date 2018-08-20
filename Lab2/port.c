@@ -40,7 +40,7 @@ void GPIO_configure(void)
     P1->OUT |= 0x02; //enable specifically the pullup resistor
     P1->IFG &= ~0x02; //remove pending interrupt flag(always clear flag before enabling it or else an interrupt might occur right when it is enabled :) )
     P1->IES |= 0x02; //high to low trigger type
-    P1->IE |= 0x02; //interrupt enabled for corresponding port (?? Whole port or just pin?(pg 519))
+    P1->IE |= 0x02; //interrupt enabled for corresponding port
 
     //Right button configure (P1.4)
     P1->SEL0 &= ~0x10;
@@ -58,14 +58,14 @@ void GPIO_configure(void)
     P1->DIR |= (1 << 7);
     P1->OUT &= ~(1 << 7);
 
-    //NVIC_EnableIRQ(PORT1_IRQn); //function inside header file(does same thing as line below) //IRQn_Type->PORT1_IRQn = bit 35 (***near top of mspjfkdsfhsjfhs.h***) so set bit 35 of ISER1 to 1?   //NVIC_IPR8_PRI_35_M - location of bit 35?
+    //NVIC_EnableIRQ(PORT1_IRQn); //function inside header file(does same thing as line below) //IRQn_Type->PORT1_IRQn = bit 35 
     NVIC->ISER[1] |= 0x08; //enable Port 1 Interrupt in the NVIC (Interrupt IRQn #35)
 }
 void PORT1_IRQHandler (void) //Interrupt Service Routine
 {
     P1->OUT ^= (1 << 7); //toggle when either of the button interrupts are flagged
     if(P1->IFG & 0x02){
-        P1->IFG &= ~0x02; //clear flag! :) 
+        P1->IFG &= ~0x02; //clear flag :) 
         //uint32_t i = 0;
         //for (i = 0; i < 300000; i++); //for loop delay
         P1->OUT ^= 0x01;
@@ -78,7 +78,7 @@ void PORT1_IRQHandler (void) //Interrupt Service Routine
         }
     }
     if(P1->IFG & 0x10){
-        P1->IFG &= ~0x10; //clear flag! :)
+        P1->IFG &= ~0x10; //clear flag :)
         if((P2->OUT & 0x07) == 0x07){ //if 1st 3 LSBs are all 1, then change back to all 0s
             P2->OUT &= ~0x07;
         }
