@@ -58,13 +58,13 @@ void buffer_check(){
     addItemToBuffer(buf, 3);
     addItemToBuffer(buf, 4);
 
-    removed = removeItemFromBuffer(buf); //doesn't actually remove data, just moves head over so that that value is allowed to get overwritten (which makes sense)
+    removed = removeItemFromBuffer(buf); 
     removed = removeItemFromBuffer(buf);
 
-    addItemToBuffer(buf, 5); //(???)the wrapping functionality doesn't work here with the & method -- so switched to modulo method and now it works (look at notebook)
+    addItemToBuffer(buf, 5); 
     addItemToBuffer(buf, 6);
 
-    clearBuffer(buf); //this actually removes the data and sets the head, tail, and num_items back to 0
+    clearBuffer(buf); 
 
     addItemToBuffer(buf, 2);
     addItemToBuffer(buf, 3);
