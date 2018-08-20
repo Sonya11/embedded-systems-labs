@@ -17,7 +17,6 @@ void UART_config(void){
     //configuring P1.2 and P1.3 to primary mode (UCA0RXD and UCA0TXD)
     P1->SEL0 |= BIT2 | BIT3;
     P1->SEL1 &= ~(BIT2 | BIT3);
-    //(P1->DIR config doesn't matter for this (Datasheet pg 139))
 
     //configuring UART :)
     EUSCI_A0->CTLW0 |= EUSCI_A_CTLW0_SWRST; //enable eUSCI reset (necessary for configuration)
@@ -32,16 +31,15 @@ void UART_config(void){
     NVIC_EnableIRQ(16); //in tech ref and in msp432p401r.h (ctrl-F IRQn_Type)
 }
 
-void UART_send_n(uint8_t * data, uint32_t length){ //data is uint8_t so that pointer increments by 8 bits (1 byte) each time i increments
+void UART_send_n(uint8_t * data, uint32_t length){ //send n number of bytes
     uint8_t i;
     for(i = 0; i < length; i++){
         UART_send_byte(*(data+i));
     }
 }
 
-void UART_send_byte(uint16_t data){
+void UART_send_byte(uint16_t data){ //send one byte
     while(UCA0_BUSY); //while the UART transmit or receive is busy
-    //while(!(EUSCI_A0->IFG & )); //while trans complete interrupt flag is not set
     EUSCI_A0->TXBUF = data;
 }
 
@@ -51,9 +49,9 @@ void systick_config(void){
     SYSTICK_STCSR |= 0x0001; //enable systick
 }
 
-void EUSCIA0_IRQHandler(void){ //works when I step through but when I run it gets stuck inside the handler
+void EUSCIA0_IRQHandler(void){ 
    if(EUSCI_A0->IFG & EUSCI_A_IFG_RXIFG){ //if RX buffer receives a complete character
-       EUSCI_A0->IFG &= ~EUSCI_A_IFG_RXIFG; //clear flag - dont need to do because it automatically does this when it reads the recieive (and same with transmit too)
+       EUSCI_A0->IFG &= ~EUSCI_A_IFG_RXIFG; //clear flag 
        EUSCI_A0->TXBUF = EUSCI_A0->RXBUF; //echo
    }
 }
