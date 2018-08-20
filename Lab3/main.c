@@ -23,7 +23,7 @@ void main(void)
 {
     WDT_A->CTL = WDT_A_CTL_PW | WDT_A_CTL_HOLD;     // stop watchdog timer
     uint8_t data = 0xAA; //one byte
-    uint8_t str[] = "Why not Zoidberg?"; //17 char * 8 bits (actually 7) per ASCII char to find data type size needed -- make it a pointer/array
+    uint8_t str[] = "Why not Zoidberg?"; //17 char * 8 bits (actually 7) per ASCII char to find data type size needed
 	clock_config();
 	systick_config();
 	UART_config();
