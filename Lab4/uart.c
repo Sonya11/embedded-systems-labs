@@ -21,7 +21,7 @@ void UART_config(void){
 
     //configuring UART :)
     EUSCI_A0->CTLW0 |= EUSCI_A_CTLW0_SWRST; //enable eUSCI reset (necessary for configuration)
-    EUSCI_A0->CTLW0 = 0x0081; //parity disable, LSB first, 8 bit char, 1 stop bit, UART mode, Asynch, BRCLK = SMCLK :), etc (frame config)
+    EUSCI_A0->CTLW0 = 0x0081; //parity disable, LSB first, 8 bit char, 1 stop bit, UART mode, Asynch, BRCLK = SMCLK
     EUSCI_A0->CTLW1 |= EUSCI_A_CTLW1_GLIT_3; //set deglitch time
     EUSCI_A0->BRW = 26; //clock prescaler for baud rate
     EUSCI_A0->MCTLW = 0xB601; // timer settings based on 9600 baud and 4MHz BRCLK (from table)
@@ -29,17 +29,17 @@ void UART_config(void){
 
     EUSCI_A0->IE |= EUSCI_A_IE_RXIE;//enable receive interrupt
     EUSCI_A0->IFG = 0x0; //reset all flags to 0
-    NVIC_EnableIRQ(16); //in tech ref and in msp432p401r.h (ctrl-F IRQn_Type)
+    NVIC_EnableIRQ(16); // referenced in tech ref and in msp432p401r.h (ctrl-F IRQn_Type)
 }
 
-void UART_send_n(uint8_t * data, uint32_t length){ //data is uint8_t so that pointer increments by 8 bits (1 byte) each time i increments
+void UART_send_n(uint8_t * data, uint32_t length){ //send n number of bytes
     uint8_t i;
     for(i = 0; i < length; i++){
         UART_send_byte(*(data+i));
     }
 }
 
-void UART_send_byte(uint16_t data){
+void UART_send_byte(uint16_t data){ //send one byte
     while(UCA0_BUSY); //while the UART transmit or receive is busy
     //while(!(EUSCI_A0->IFG & )); //while trans complete interrupt flag is not set
     EUSCI_A0->TXBUF = data;
