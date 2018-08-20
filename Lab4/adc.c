@@ -25,7 +25,7 @@ void ADC_temp_config(void){
     REF_A->CTL0 = 0x0031;   // Set up a 2.5 V reference voltage, Turn on Temperature Sensor
 
     ADC14->CTL0 = 0; //default and turn off ADC
-    ADC14->CTL0 |= 0xC56A6090; //clock divided to take sample every 1.032s #doubleyay, HSMCLK as source
+    ADC14->CTL0 |= 0xC56A6090; //clock divided to take sample every 1.032s, HSMCLK as source
     ADC14->CTL1 |= 0x00800030; 
     ADC14->MCTL[0] |= 0x0116;
 
