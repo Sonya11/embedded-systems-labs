@@ -15,10 +15,8 @@ void clock_config(void){
     //UART clock configs
     CS->KEY = 0x695A; //unlock CS module for register access (CS = Clock Source)
     CS->CTL0 = 0; //*reset tuning parameters*
-    CS->CTL0 |= 0x0001008D; //(0x00010092)(CS_CTL0_DCORSEL_1) set up DCO clock(eventually change tuning bits(the last bits) to make it as close to 4MHz as possible (that is the frequency with the closest errors in the clock setup table for UART) - right now it is 0)(2-4 MHz is chosen because it has more "resolution" than 4-8 since there is less of a range)
+    CS->CTL0 |= 0x0001008D; //set up DCO clock to make as close to 4MHz as possible 
     CS->CTL1 = CS_CTL1_SELA_2 | CS_CTL1_SELS_3 | CS_CTL1_SELM_3; //Select ACLK = REFOCLK, SMCLK = MCLK = DCO
-    //^^SELM_3 selects DCOCLK as source for MCLK (Master Clock - used by CPU), SELS_3 selects DCOCLK as source for SMCLK (and HSMCLK),SELA_2 selects REFOCLK as source for ACLK
-    //^^(So SMCLK = MCLK = DCO = BRCLK because in UART config we set BRCLK = SMCLK)
     CS->CTL1 |= 0x00200000; //dividing HSMCLK to divide ADC clock more
     CS->KEY = 0; //lock CS module for register access
     //output SMCLK freq to pin to tune freq using oscilliscope
